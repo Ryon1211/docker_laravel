@@ -20,3 +20,4 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Laravelインストーラのインストール
 RUN composer global require laravel/installer
+ENV PATH $PATH:/root/.composer/vendor/bin
