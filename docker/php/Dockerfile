@@ -4,11 +4,14 @@ SHELL ["/bin/bash", "-c", "-oeux", "pipefail"]
 # パッケージのインストール
 # インストール完了後にaptキャッシュを削除
 RUN apt-get update && apt-get install -y \
-  git vim gcc make nodejs unzip \
+  git vim gcc make unzip \
   libzip-dev libicu-dev libonig-dev && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
   docker-php-ext-install intl pdo_mysql zip bcmath
+# apt-getでは、古いバージョンのnodejsがインストールされるので、nvmをインストールして管理
+# build後にnvm install --ltsで最新のLTSバージョンをインストールする
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 
@@ -17,7 +20,3 @@ WORKDIR /www
 # composerのインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-# Laravelインストーラのインストール
-RUN composer global require laravel/installer
-ENV PATH $PATH:/root/.composer/vendor/bin
