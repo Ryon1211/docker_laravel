@@ -1,7 +1,10 @@
 version: "3.9"
+
 services:
   app:
     build: ./docker/php
+    expose:
+      - 9000
     volumes:
       - ./app:/www
     depends_on:
@@ -10,7 +13,7 @@ services:
   web:
     build: ./docker/ngnix
     ports:
-      - 8080:80
+      - 8080:8080
     volumes:
       - ./app:/www
     depends_on:
@@ -18,6 +21,8 @@ services:
 
   db:
     build: ./docker/mysql
+    expose:
+      - 3306
     volumes:
       - db-store:/var/lib/mysql
 

@@ -8,3 +8,8 @@ ENV MYSQL_DATABASE=mysql_db \
 
 COPY ./my.cnf /etc/mysql/conf.d/my.cnf
 RUN chmod 644 /etc/mysql/conf.d/my.cnf
+
+RUN mkdir /var/log/mysql && \
+  chown -R mysql:mysql /var/log/mysql
+
+USER mysql
