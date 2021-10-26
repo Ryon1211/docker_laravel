@@ -25,12 +25,10 @@ WORKDIR /www
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-
 ARG USERNAME=fpm
 ARG GROUPNAME=fpm
-ARG UID=1000
-ARG GID=1000
-RUN groupadd -g $GID $GROUPNAME && \
-  useradd -ms /bin/bash -u $UID -g $GID $USERNAME
+
+RUN groupadd $GROUPNAME && \
+  useradd -ms /bin/bash -g $GROUPNAME $USERNAME
 
 USER $USERNAME
