@@ -23,6 +23,8 @@ services:
     build: ./docker/mysql
     expose:
       - 3306
+    env_file:
+      - ./docker/mysql/db.env
     volumes:
       - db-store:/var/lib/mysql
 
