@@ -28,30 +28,6 @@ WORKDIR /www
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# マルチステージビルド
-FROM php:8.0.12-fpm-buster
-
-COPY --from=builder /www /www
-
-RUN apt-get update \
-  && apt-get install -y \
-  git vim unzip nodejs npm&& \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  docker-php-ext-install pdo_mysql bcmath
-
-# apt-getでは、古いバージョンのnodejsがインストールされるので、nをインストールして管理
-RUN npm install -g n && n stable
-
-# apt-getで最初にインストールした古いnodejsとnpmは削除する
-RUN apt-get purge -y nodejs npm
-
-WORKDIR /www
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
-
 ARG USERNAME=fpm
 ARG GROUPNAME=fpm
 
